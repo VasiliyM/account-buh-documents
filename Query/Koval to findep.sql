@@ -8,7 +8,7 @@ SELECT @cnt:=@cnt+1 AS NN, fin.nplane as '№ задачи', fin.postav as 'По
 		   (SELECT z_confirm_catal.state FROM `z_confirmation` prv LEFT JOIN  z_confirm_catal ON prv.status=z_confirm_catal.id WHERE prv.sheet like 'z_tab_invoice' AND `prv`.`sheet_id` = fin.idnt ORDER BY prv.tmstamp DESC  LIMIT 1),
 		   '') AS Комент,
 		fin.tblkoval AS 'ТаблицаКовальчук',
-		(SELECT DATE_FORMAT(prv.tmstamp,'%d.%m.%y') FROM `z_confirmation` prv WHERE prv.sheet like 'z_tab_invoice' AND `prv`.`sheet_id` = fin.idnt ORDER BY prv.tmstamp DESC  LIMIT 1) AS Подтвержден
+		(SELECT DATE_FORMAT(prv.tmstamp,'%d.%m.%y %H:%i') FROM `z_confirmation` prv WHERE prv.sheet like 'z_tab_invoice' AND `prv`.`sheet_id` = fin.idnt ORDER BY prv.tmstamp DESC  LIMIT 1) AS Подтвержден
 FROM 
 ((SELECT kli.client AS 'nplane', provider.client AS 'postav',z_tab_invoice.num_invoice AS numinv,
 	     ROUND(z_tab_invoice.summa,2) AS aminvoice, z_tab_catal_type_budget_kovalchuk.kname  AS 'artbudg',
@@ -20,10 +20,10 @@ LEFT JOIN z_tab_catal_type_budget_kovalchuk ON z_tab_catal_type_budget.finKovalc
 LEFT JOIN tab_catal_dogovor ON z_tab_invoice.num_dogovor=tab_catal_dogovor.id
 LEFT JOIN z_connecttable ON tab_catal_dogovor.id = z_connecttable.tab_b_id AND z_connecttable.tab_b like 'tab_catal_dogovor'
 LEFT JOIN tab_klients provider ON z_connecttable.tab_a_id = provider.id
-WHERE z_tab_invoice.type_docum = '2'  AND z_connecttable.tab_a like 'tab_klients' AND z_tab_invoice.dt_of_pay = '0000-00-00'
-	  AND (SELECT prv.status	FROM `z_confirmation` prv WHERE prv.sheet like 'z_tab_invoice' AND `prv`.`sheet_id` = z_tab_invoice.id ORDER BY prv.tmstamp DESC  LIMIT 1) NOT IN (30,50))
+WHERE z_tab_invoice.type_docum = '2' AND z_tab_invoice.not_incl_in_kreestr = '0' AND z_connecttable.tab_a like 'tab_klients' AND z_tab_invoice.dt_of_pay = '0000-00-00'
+	  AND (SELECT prv.status FROM `z_confirmation` prv WHERE prv.sheet like 'z_tab_invoice' AND prv.tmstamp <= concat(DATE(NOW()),' 15:00:00') AND `prv`.`sheet_id` = z_tab_invoice.id ORDER BY prv.tmstamp DESC  LIMIT 1) NOT IN (30,50))
 UNION ALL
-(SELECT kli.client AS '№ задачи',provider.client AS 'Прставщик',z_tab_invoice.num_invoice AS 'НомСчета',
+(SELECT kli.client AS '№ задачи',provider.client AS 'Поставщик',z_tab_invoice.num_invoice AS 'НомСчета',
 	   ROUND(z_tab_invoice.summa,2) AS 'Сумма', z_tab_catal_type_budget_kovalchuk.kname  AS 'Статья бюджета',
 	   z_tab_invoice.sap_id AS 'ts',z_tab_invoice.reestr_num_kovalchuk as tblkoval,  z_tab_invoice.id as idnt
 FROM z_tab_invoice 
@@ -33,6 +33,6 @@ LEFT JOIN z_tab_catal_type_budget_kovalchuk ON z_tab_catal_type_budget.finKovalc
 LEFT JOIN tab_catal_dogovor ON z_tab_invoice.num_dogovor=tab_catal_dogovor.id 
 LEFT JOIN z_connecttable ON tab_catal_dogovor.id = z_connecttable.tab_b_id AND z_connecttable.tab_b like 'tab_catal_dogovor'
 LEFT JOIN z_tab_klients provider ON z_connecttable.tab_a_id = provider.id
-WHERE z_tab_invoice.type_docum = '2'  AND z_connecttable.tab_a like 'z_tab_klients' AND z_tab_invoice.dt_of_pay = '0000-00-00'
-	  AND (SELECT prv.status	FROM `z_confirmation` prv WHERE prv.sheet like 'z_tab_invoice' AND `prv`.`sheet_id` = z_tab_invoice.id ORDER BY prv.tmstamp DESC  LIMIT 1) NOT IN (30,50))) fin
+WHERE z_tab_invoice.type_docum = '2' AND z_tab_invoice.not_incl_in_kreestr = '0' AND z_connecttable.tab_a like 'z_tab_klients' AND z_tab_invoice.dt_of_pay = '0000-00-00'
+	  AND (SELECT prv.status FROM `z_confirmation` prv WHERE prv.sheet like 'z_tab_invoice' AND prv.tmstamp <= concat(DATE(NOW()),' 15:00:00') AND `prv`.`sheet_id` = z_tab_invoice.id ORDER BY prv.tmstamp DESC  LIMIT 1) NOT IN (30,50))) fin
 ORDER BY fin.artbudg ASC, Комент DESC, Подтвержден ASC
