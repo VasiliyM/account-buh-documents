@@ -1,0 +1,1 @@
+Files for Manager`s web interface
