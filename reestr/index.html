@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="js/bootstrup/docs/assets/ico/favicon_new.ico">
+    <title>Датагруп, учет бухгалтерских документов</title>
+    <!-- Bootstrap core CSS -->
+    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="js/bootstrap/css/signin.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+
+      <form action="includes/login.php" method="POST" class="form-signin" role="form">
+        <h2 class="form-signin-heading">Войти</h2>
+
+        <input type="text" name="username" class="form-control" placeholder="Логин" required autofocus>
+        <input type="password" name="password" class="form-control" placeholder="Пароль" required>
+        <!--<label class="checkbox">
+          <input type="checkbox" value="remember-me"> Remember me
+        </label> -->
+        <button name="login" value="ВОЙТИ" class="btn btn-lg btn-primary btn-block" type="submit">Вход</button>
+        <br><br>
+        <div class="container-fluid">
+            <div class="row">
+                 <div class="col-md-4">
+                    <a href="http://osdb.datagroup/osdb/register.php">Регистрация</a>
+                </div>
+                <div class="col-md-8">
+                    <a href="http://osdb.datagroup/osdb/forgetpwd.php">Восстановление пароля</a>
+                </div>
+            </div>
+		</div>
+        	<div class="alert alert-warning" role="alert">* Логин и пароль такие же как для БДСЭ, БД СТОП, Книгу жалоб. Если логина нет или забыт - смело нажимайте кнопки регистрация или восстановление пароля.</div>
+      </form>
+   
+    </div> <!-- /container -->
+
+</body>
+</html>
