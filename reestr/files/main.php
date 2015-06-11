@@ -221,10 +221,12 @@
             loadInitComplete();
         });
         if (num == 1 || num == 3) {
+            //не доступно для изменений
             document.getElementById('lbl_stat').setAttribute("disabled","disabled");
             document.getElementById('stat').setAttribute("disabled","disabled");
             document.getElementById('button').setAttribute("disabled","disabled");
         } else {
+            //доступно для изменений
             document.getElementById('lbl_stat').removeAttribute("disabled");
             document.getElementById('stat').removeAttribute("disabled");
             document.getElementById('button').removeAttribute("disabled");
