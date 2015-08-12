@@ -89,7 +89,7 @@ if(!isset($_GET["action"])) {
                     LEFT JOIN tab_klients klnt ON z_tab_invoice.client=klnt.id
                     LEFT JOIN tab_town ON z_tab_invoice.town = tab_town.id
                     LEFT JOIN tab_access otvetstv ON z_tab_invoice.responsible=otvetstv.id
-                    WHERE `type_docum` = 2 AND z_tab_invoice.manager LIKE '$manager' AND z_tab_invoice.client LIKE '$client' AND z_tab_invoice.dt_of_pay = '0000-00-00'
+                    WHERE `type_docum` = 2 AND z_tab_invoice.manager LIKE '$manager' AND z_tab_invoice.client LIKE '$client' AND z_tab_invoice.dt_of_pay = '0000-00-00' AND z_tab_invoice.not_incl_in_kreestr = 0
                           AND (((SELECT prv.status	FROM `z_confirmation` prv WHERE prv.sheet like 'z_tab_invoice' AND `prv`.`sheet_id` = z_tab_invoice.id LIMIT 1) IS NULL)
                                 OR ((SELECT prv.status	FROM `z_confirmation` prv WHERE prv.sheet like 'z_tab_invoice' AND `prv`.`sheet_id` = z_tab_invoice.id ORDER by prv.tmstamp DESC LIMIT 1) IN (50)) )
                     ORDER BY klnt.client ASC, z_tab_invoice.sap_id DESC";
