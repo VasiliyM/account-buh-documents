@@ -13,6 +13,7 @@
        if(z_tab_invoice.dt_of_pay!='0000-00-00',DATE_FORMAT(z_tab_invoice.dt_of_pay,'%d.%m.%y'),'') AS 'Дата оплаты', 
        if(z_tab_invoice.reestr_num_kovalchuk !='0',z_tab_invoice.reestr_num_kovalchuk,'') AS 'Реестр Ковальчук',
        z_tab_catal_type_budget.statiya  AS 'Статья бюджета',
+       z_tab_invoice.description AS comment,
        z_tab_invoice.sap_id AS 'ts'
 FROM z_tab_invoice 
 LEFT JOIN  tab_catal_comm_dep ON z_tab_invoice.business = tab_catal_comm_dep.id
@@ -41,6 +42,7 @@ UNION ALL
        if(z_tab_invoice.dt_of_pay!='0000-00-00',DATE_FORMAT(z_tab_invoice.dt_of_pay,'%d.%m.%y'),'') AS 'Дата оплаты', 
        if(z_tab_invoice.reestr_num_kovalchuk !='0',z_tab_invoice.reestr_num_kovalchuk,'') AS 'Реестр Ковальчук',
        z_tab_catal_type_budget.statiya  AS 'Статья бюджета',
+       z_tab_invoice.description AS comment,
        z_tab_invoice.sap_id AS 'ts'
 FROM z_tab_invoice 
 LEFT JOIN  tab_catal_comm_dep ON z_tab_invoice.business = tab_catal_comm_dep.id
