@@ -13,8 +13,13 @@
        if(z_tab_invoice.dt_of_pay!='0000-00-00',DATE_FORMAT(z_tab_invoice.dt_of_pay,'%d.%m.%y'),'') AS 'Дата оплаты', 
        if(z_tab_invoice.reestr_num_kovalchuk !='0',z_tab_invoice.reestr_num_kovalchuk,'') AS 'Реестр Ковальчук',
        z_tab_catal_type_budget.statiya  AS 'Статья бюджета',
+       COALESCE((SELECT z_confirm_catal.state
+	   FROM `z_confirmation`
+	   LEFT JOIN  z_confirm_catal ON z_confirmation.status=z_confirm_catal.id 
+	   WHERE z_confirmation.sheet like 'z_tab_invoice' AND `z_confirmation`.`sheet_id` = z_tab_invoice.id 
+	   ORDER BY z_confirmation.tmstamp DESC LIMIT 1),'') AS status,
        z_tab_invoice.description AS comment,
-       z_tab_invoice.sap_id AS 'ts'
+	   z_tab_invoice.sap_id AS 'ts'
 FROM z_tab_invoice 
 LEFT JOIN  tab_catal_comm_dep ON z_tab_invoice.business = tab_catal_comm_dep.id
 LEFT JOIN  tab_access ON z_tab_invoice.manager=tab_access.id
@@ -42,6 +47,11 @@ UNION ALL
        if(z_tab_invoice.dt_of_pay!='0000-00-00',DATE_FORMAT(z_tab_invoice.dt_of_pay,'%d.%m.%y'),'') AS 'Дата оплаты', 
        if(z_tab_invoice.reestr_num_kovalchuk !='0',z_tab_invoice.reestr_num_kovalchuk,'') AS 'Реестр Ковальчук',
        z_tab_catal_type_budget.statiya  AS 'Статья бюджета',
+       COALESCE((SELECT z_confirm_catal.state
+	   FROM `z_confirmation` cfrm
+	   LEFT JOIN  z_confirm_catal ON cfrm.status=z_confirm_catal.id 
+	   WHERE cfrm.sheet like 'z_tab_invoice' AND `cfrm`.`sheet_id` = z_tab_invoice.id 
+	   ORDER BY cfrm.tmstamp DESC LIMIT 1),'') AS status,
        z_tab_invoice.description AS comment,
        z_tab_invoice.sap_id AS 'ts'
 FROM z_tab_invoice 
