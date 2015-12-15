@@ -2,7 +2,7 @@
 ini_set('default_charset',"UTF-8");
 if(!isset($_GET["action"])) {
     //Return result to
-    $out = array('data' => []);
+    $out = array('data' => array());
     echo json_encode($out); }
   else {
       require "../includes/constants.php";
@@ -147,7 +147,7 @@ if(!isset($_GET["action"])) {
     if(!empty($rows)) {
         $out = array('data' => $rows);
     } else {
-        $out = array('data' => []);
+        $out = array('data' => array());
     }
     echo json_encode($out);
 }

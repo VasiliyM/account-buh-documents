@@ -148,38 +148,38 @@
                 "url": '../includes/rassian.json'
             },
             "initComplete": function ( settings, json ) {
-                    this.api().columns().every(function () {
-                        var column = this, idx = column.index();
-                        if (idx == 1 || idx == 2) {
-                            if (idx == 1) {
-                                var nameCol = 'Менеджер';
-                                var classCol = 'class="input-sm select-tbl1"'
-                            } else {
-                                var nameCol = 'Клиент';
-                                var classCol = 'class="input-sm select-tbl2"'
-                            }
-                            var select = $('<select ' + classCol + '><option value="">' + nameCol + '</option></select>')
-                                .appendTo($(column.header()).empty())
-                                .on('change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex(
-                                        $(this).val()
-                                    );
-
-                                    column
-                                        .search(val ? '^' + val + '$' : '', true, false)
-                                        .draw();
-                                });
-
-                            column.data().unique().sort().each(function (d, j) {
-                                if ( d == nik ) {
-                                    select.append('<option selected value="' + d + '">' + d + '</option>');
-                                }
-                                else {
-                                    select.append('<option value="' + d + '">' + d + '</option>');
-                                }
-                            });
+                this.api().columns().every(function () {
+                    var column = this, idx = column.index();
+                    if (idx == 1 || idx == 2) {
+                        if (idx == 1) {
+                            var nameCol = 'Менеджер';
+                            var classCol = 'class="input-sm select-tbl1"'
+                        } else {
+                            var nameCol = 'Клиент';
+                            var classCol = 'class="input-sm select-tbl2"'
                         }
-                    });
+                        var select = $('<select ' + classCol + '><option value="">' + nameCol + '</option></select>')
+                            .appendTo($(column.header()).empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            if ( d == nik ) {
+                                select.append('<option selected value="' + d + '">' + d + '</option>');
+                            }
+                            else {
+                                select.append('<option value="' + d + '">' + d + '</option>');
+                            }
+                        });
+                    }
+                });
             }
         });
         // начальная установка: выбор записей залогиневшегося
@@ -188,7 +188,7 @@
         $('#button').click( function () {
             var list = '';
             $("tbody tr.selected").each(function () {
-             // список ID выбранных строк
+                // список ID выбранных строк
                 var getValue = $(this).find("td:eq(0)").html();
                 list += Number(getValue) + ' ';
             });
@@ -234,12 +234,12 @@
     };
     // вспомогательная: дублирует InitComplete при перезагрузке
     function loadInitComplete() {
-       // эта цепочка удаляет все фильтры примененные к DataTable:
+        // эта цепочка удаляет все фильтры примененные к DataTable:
         mTable
             .search( '' )
             .columns().search( '' )
             .draw();
-       // заполнить select для выбранных полей
+        // заполнить select для выбранных полей
         mTable.columns().every( function () {
             var column = this, idx = column.index();
             if(idx == 1 || idx == 2) {
@@ -261,12 +261,11 @@
                             .draw();
                     });
                 column.data().unique().sort().each(function (d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>');
+                    select.append('<option value="' + d + '">' + d + '</option>');
                 });
             }
         } );
     };
-
 </script>
 </html>
 <?php } ?>
