@@ -89,19 +89,21 @@
     </table>
 
       <div class="pull-right form-inline">
+          <input type="date" class="form-control" name="dt_plan">
+          <input type="text" class="form-control" name="description">
           <label for="stat" class="form-control" id="lbl_stat">Выбранным документам присвоить статус:</label>
-          <select id="stat" class="form-control" name="status">
-              <option value="Подтвердить оплату">Подтвердить оплату</option>
+          <select id="stat" class="form-control" name="status" onchange="javascript:selectStatus();">
+          <!--    <option value="Подтвердить оплату">Подтвердить оплату</option>
               <option value="Срочно в оплату">Срочно в оплату</option>
               <option value="Отменен">Отменен</option>
               <option value="Перенесен на следующий день">Перенесен на следующий день</option>
+              -->
           </select>
           <button type="button" id="button" class="btn btn-primary">Применить</button>
       </div>
 
-
   </div>
-  </div>
+</div>
   <div class="alert alert-warning" role="alert">* Документы получившие подтверждение до 15:00 попадут в оплату на следующий день,подтвержденные после 15:00 будут переданны в оплату через день</div>
   </div>
   </div>
@@ -117,11 +119,12 @@
 <script src="../js/jquery.dataTables.min.js"></script>
 <script src="../js/dataTables.bootstrap.js"></script>
 <script src="../js/dataTables.tableTools.min.js"></script>
+<!-- my script -->
 <script>
     $(document).ready( function (){
         // вернуть ФИО и ID залогиненого
-        var idnik = "<?php echo $idnik ?>";
-        var nik = "<?php echo $nik ?>";
+        var idnik = "<?php echo $idnik; ?>";
+        var nik = "<?php echo $nik; ?>";
         //console.log(idnik +' - '+ nik);
         // DataTable
         mTable = $('#table_main').DataTable({
@@ -184,7 +187,19 @@
         });
         // начальная установка: выбор записей залогиневшегося
         mTable.column( 1 ).search( nik  ).draw( false );
-        // отрабатывает клик! по кнопке
+        //выставить начльную дату (NOW + 14 day)
+        var d = new Date();
+        d.setDate(d.getDate() + 14);
+        $('input[name="dt_plan"]').attr("value", d.toISOString().substring(0, 10));
+        // заполнить ComboBox "status"
+        $.ajax({
+            type: "post",
+            url: "ajax.sql.combo.php",
+            data: { action: 'fillStatus' },
+            cache: false,
+            success: function(responce) { $('select[name="status"]').html(responce); }
+        });
+        // BUTTON: отрабатывает клик! по кнопке
         $('#button').click( function () {
             var list = '';
             $("tbody tr.selected").each(function () {
@@ -194,25 +209,19 @@
             });
             if(list.length > 0) {
                 var num = $('select[name="status"]').val();
+                var dt = $('input[name="dt_plan"]').val();
+                var str = $('input[name="description"]').val();
                 $.ajax({
                     type: "post",
                     url: "ajax.sql.combo.php",
-                    data: { action: 'insertStatus', id: list, stat: num },
+                    data: { action: 'insertStatus', id: list, stat: num, dt: dt, desc: str },
                     cache: false,
                     success: function(responce) { selectDocument(); }
                 });
             }
         } );
-        // заполнить ComboBox "status"
-        $.ajax({
-            type: "post",
-            url: "ajax.sql.combo.php",
-            data: { action: 'fillStatus' },
-            cache: false,
-            success: function(responce) { $('select[name="status"]').html(responce); }
-        });
-
     }); //$(document).ready
+
     // отрабатывает ComboBox "document"
     function selectDocument() {
         var num = $('select[name="document"]').val();
@@ -265,6 +274,29 @@
                 });
             }
         } );
+    };
+    function selectStatus(){
+        var num = $('select[name="status"]').val();
+        var d = new Date();
+        if(num == 10){
+            d.setDate(d.getDate() + 14);
+            $('input[name="dt_plan"]').val(d.toISOString().substring(0, 10));
+        };
+        if(num == 20){
+            switch(d.getDay()){
+                case 5:
+                    d.setDate(d.getDate() + 3);
+                    break;
+                case 6:
+                    d.setDate(d.getDate() + 2);
+                    break;
+                default:
+                    d.setDate(d.getDate() + 1);
+                    break;
+            };
+            $('input[name="dt_plan"]').val(d.toISOString().substring(0, 10));
+        };
+       // console.log(d.toISOString().substring(0, 10));
     };
 </script>
 </html>

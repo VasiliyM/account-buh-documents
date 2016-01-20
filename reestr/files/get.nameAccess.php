@@ -6,7 +6,7 @@
     }
     // для русской кодировки
     mysqli_query($mysqli, "SET NAMES utf8");
-    $sql = "SELECT `nik` FROM `tab_access` WHERE `id` = '$idnik'";
+    $sql = "SELECT nik FROM tab_access WHERE id = '$idnik'";
     $res = mysqli_query($mysqli, $sql);
     $row = mysqli_fetch_assoc($res);
     $nik = $row['nik'];
