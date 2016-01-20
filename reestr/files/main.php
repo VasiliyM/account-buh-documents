@@ -201,23 +201,45 @@
         });
         // BUTTON: отрабатывает клик! по кнопке
         $('#button').click( function () {
-            var list = '';
-            $("tbody tr.selected").each(function () {
-                // список ID выбранных строк
-                var getValue = $(this).find("td:eq(0)").html();
-                list += Number(getValue) + ' ';
-            });
-            if(list.length > 0) {
-                var num = $('select[name="status"]').val();
-                var dt = $('input[name="dt_plan"]').val();
-                var str = $('input[name="description"]').val();
-                $.ajax({
-                    type: "post",
-                    url: "ajax.sql.combo.php",
-                    data: { action: 'insertStatus', id: list, stat: num, dt: dt, desc: str },
-                    cache: false,
-                    success: function(responce) { selectDocument(); }
+            var dt1 = new Date();
+            var dt2 = $('input[name="dt_plan"]').val();
+            dt2 = new Date(dt2);
+            var flag = true;
+            if(isNaN(dt2)) {
+                alert('Дату необходимо выбрать');
+                flag = false;
+            } else {
+                if (dt2.getFullYear() === dt1.getFullYear() && dt2.getDate() === dt1.getDate() && dt2.getMonth() === dt1.getMonth()) {
+                    alert('Дата должна быть больше текущей');
+                    flag = false;
+                } else {
+                    if (dt1 > dt2) {
+                        alert('Дата должна быть больше текущей');
+                        flag = false;
+                    }
+                }
+            };
+            if(flag) {
+                var list = '';
+                $("tbody tr.selected").each(function () {
+                    // список ID выбранных строк
+                    var getValue = $(this).find("td:eq(0)").html();
+                    list += Number(getValue) + ' ';
                 });
+                if (list.length > 0) {
+                    var num = $('select[name="status"]').val();
+                    var dt = $('input[name="dt_plan"]').val();
+                    var str = $('input[name="description"]').val();
+                    $.ajax({
+                        type: "post",
+                        url: "ajax.sql.combo.php",
+                        data: {action: 'insertStatus', id: list, stat: num, dt: dt, desc: str},
+                        cache: false,
+                        success: function (responce) {
+                            selectDocument();
+                        }
+                    });
+                }
             }
         } );
     }); //$(document).ready
