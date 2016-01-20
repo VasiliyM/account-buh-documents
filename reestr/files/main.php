@@ -306,6 +306,10 @@
         };
         if(num == 20){
             switch(d.getDay()){
+                case 4:
+                    if(d.getHours() < 12) { $i = 1} else {$i = 4};
+                    d.setDate(d.getDate() + $i);
+                    break;
                 case 5:
                     d.setDate(d.getDate() + 3);
                     break;
@@ -313,12 +317,16 @@
                     d.setDate(d.getDate() + 2);
                     break;
                 default:
-                    d.setDate(d.getDate() + 1);
+                    if(d.getHours() < 12) { $i = 1} else {$i = 2};
+                    d.setDate(d.getDate() + $i);
                     break;
             };
             $('input[name="dt_plan"]').val(d.toISOString().substring(0, 10));
+            $('input[name="dt_plan"]').attr("disabled","disabled");
+        } else {
+            $('input[name="dt_plan"]').removeAttr("disabled");
         };
-       // console.log(d.toISOString().substring(0, 10));
+        //console.log(d.getHours()+' - '+$i);
     };
 </script>
 </html>
