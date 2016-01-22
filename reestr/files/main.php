@@ -10,12 +10,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="bootstrap/docs/assets/ico/favicon_new.ico">
     <title>ДКП, Датагруп, подтверждение счетов</title>
 	<!-- Bootstrap core CSS -->
     <link href="../js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -25,6 +24,8 @@
     <link href="../css/jquery.dataTables.css" rel="stylesheet">
     <link href="../css/dataTables.bootstrap.css" rel="stylesheet">
     <link href="../css/dataTables.tableTools.css" rel="stylesheet">
+    <!-- jquery-ui -->
+    <link href="../css/smoothness/jquery-ui.min.css" rel="stylesheet">
     <!-- Уникальные стили для этой страницы -->
     <link href="../css/main.css" rel="stylesheet">
 </head>
@@ -88,10 +89,16 @@
         </tfoot>
     </table>
 
-      <div class="pull-right form-inline">
-          <input type="date" class="form-control" name="dt_plan">
+      <div class='col-sm-1'>
+          <input type="text" class="form-control" name="datepicker" id="datepicker">
+      </div>
+      <div class='col-sm-5'>
           <input type="text" class="form-control" name="description">
+      </div>
+      <div class='col-sm-3'>
           <label for="stat" class="form-control" id="lbl_stat">Выбранным документам присвоить статус:</label>
+      </div>
+      <div class='col-sm-2'>
           <select id="stat" class="form-control" name="status" onchange="javascript:selectStatus();">
           <!--    <option value="Подтвердить оплату">Подтвердить оплату</option>
               <option value="Срочно в оплату">Срочно в оплату</option>
@@ -99,6 +106,8 @@
               <option value="Перенесен на следующий день">Перенесен на следующий день</option>
               -->
           </select>
+      </div>
+      <div class='col-sm-1'>
           <button type="button" id="button" class="btn btn-primary">Применить</button>
       </div>
 
@@ -111,7 +120,7 @@
 
 
   </body>
-  <!-- jQuery -->
+<!-- jQuery -->
 <script src="../js/jquery-1.11.1.min.js"></script>
 <!-- bootstrap -->
 <script src="../js/bootstrap/js/bootstrap.min.js"></script>
@@ -119,8 +128,14 @@
 <script src="../js/jquery.dataTables.min.js"></script>
 <script src="../js/dataTables.bootstrap.js"></script>
 <script src="../js/dataTables.tableTools.min.js"></script>
+<!-- jquery-ui -->
+<script src="../js/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="../js/i18n/jquery.ui.datepicker-ru.js"></script>
 <!-- my script -->
 <script>
+    //datepicker ui
+    var picker = $("#datepicker").datepicker();
+
     $(document).ready( function (){
         // вернуть ФИО и ID залогиненого
         var idnik = "<?php echo $idnik; ?>";
@@ -190,7 +205,7 @@
         //выставить начльную дату (NOW + 14 day)
         var d = new Date();
         d.setDate(d.getDate() + 14);
-        $('input[name="dt_plan"]').attr("value", d.toISOString().substring(0, 10));
+        $("#datepicker").datepicker('setDate',new Date(d.getFullYear(),d.getMonth(),d.getDate()));
         // заполнить ComboBox "status"
         $.ajax({
             type: "post",
@@ -228,7 +243,7 @@
                 });
                 if (list.length > 0) {
                     var num = $('select[name="status"]').val();
-                    var dt = $('input[name="dt_plan"]').val();
+                    var dt = $("#datepicker" ).val();
                     var str = $('input[name="description"]').val();
                     $.ajax({
                         type: "post",
@@ -302,7 +317,7 @@
         var d = new Date();
         if(num == 10){
             d.setDate(d.getDate() + 14);
-            $('input[name="dt_plan"]').val(d.toISOString().substring(0, 10));
+            $("#datepicker").datepicker('setDate',new Date(d.getFullYear(),d.getMonth(),d.getDate()));
         };
         if(num == 20){
             switch(d.getDay()){
@@ -321,12 +336,12 @@
                     d.setDate(d.getDate() + $i);
                     break;
             };
-            $('input[name="dt_plan"]').val(d.toISOString().substring(0, 10));
-            $('input[name="dt_plan"]').attr("disabled","disabled");
+            $("#datepicker").datepicker('setDate',new Date(d.getFullYear(),d.getMonth(),d.getDate()));
+            $("#datepicker").datepicker('disable');
         } else {
-            $('input[name="dt_plan"]').removeAttr("disabled");
+            $("#datepicker").datepicker('enable');
         };
-        //console.log(d.getHours()+' - '+$i);
+        //console.log($("#datepicker" ).val());
     };
 </script>
 </html>

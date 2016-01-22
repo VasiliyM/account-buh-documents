@@ -35,7 +35,11 @@ switch($_POST['action']) {
         {
             $sql = "INSERT INTO z_confirmation (id, persona, sheet, sheet_id, status, tmstamp) VALUES (NULL, '$persona', 'z_tab_invoice', '$value', '$stat', CURRENT_TIMESTAMP)";
             mysqli_query($mysqli, $sql) or die(mysqli_error($mysqli));
-            $sql = "UPDATE z_tab_invoice SET dt_plan_of_pay='$dt', description = CONCAT(description,', ','$desc') WHERE z_tab_invoice.id ='$value'";
+            if($desc == ''){
+                $sql = "UPDATE z_tab_invoice SET dt_plan_of_pay='$dt' WHERE z_tab_invoice.id ='$value'";
+            } else {
+                $sql = "UPDATE z_tab_invoice SET dt_plan_of_pay='$dt', description = CONCAT(description,', ','$desc') WHERE z_tab_invoice.id ='$value'";
+            }
             mysqli_query($mysqli, $sql) or die(mysqli_error($mysqli));
         };
         echo "Ok!";
