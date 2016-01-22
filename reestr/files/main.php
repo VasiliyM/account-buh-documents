@@ -217,8 +217,7 @@
         // BUTTON: отрабатывает клик! по кнопке
         $('#button').click( function () {
             var dt1 = new Date();
-            var dt2 = $('input[name="dt_plan"]').val();
-            dt2 = new Date(dt2);
+            var dt2 = $("#datepicker").datepicker('getDate');
             var flag = true;
             if(isNaN(dt2)) {
                 alert('Дату необходимо выбрать');
