@@ -250,6 +250,7 @@
                         data: {action: 'insertStatus', id: list, stat: num, dt: dt, desc: str},
                         cache: false,
                         success: function (responce) {
+                            $('input[name="description"]').val("");
                             selectDocument();
                         }
                     });
