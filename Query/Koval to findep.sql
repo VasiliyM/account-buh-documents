@@ -7,13 +7,13 @@ SELECT @cnt:=@cnt+1 AS NN, IF((fin.nplane) IS NULL,"",fin.nplane) as num, fin.po
   IF((SELECT prv.status	FROM `z_confirmation` prv WHERE prv.sheet like "z_tab_invoice" AND `prv`.`sheet_id` = fin.idnt ORDER BY prv.tmstamp DESC  LIMIT 1) = "20", 
   (SELECT CONCAT(z_confirm_catal.state,'. ',fin.descr) FROM `z_confirmation` prv LEFT JOIN  z_confirm_catal ON prv.status=z_confirm_catal.id 
   WHERE prv.sheet like "z_tab_invoice" AND `prv`.`sheet_id` = fin.idnt ORDER BY prv.tmstamp DESC  LIMIT 1),fin.descr) AS coment, 
-  fin.dogo_vor AS dogvr, fin.dtplanpay AS datePlanPay, fin.tblkoval AS tabk, 
+  fin.dogo_vor AS dogvr, DATE_FORMAT(fin.dtplanpay,"%d.%m.%y") AS datePlanPay, fin.tblkoval AS tabk, 
   (SELECT DATE_FORMAT(prv.tmstamp,"%d.%m.%y %H:%i") FROM `z_confirmation` prv WHERE prv.sheet like "z_tab_invoice" AND `prv`.`sheet_id` = fin.idnt ORDER BY prv.tmstamp DESC  LIMIT 1) AS podtv
 FROM 
 ((SELECT kli.client AS nplane, provider.client AS postav,z_tab_invoice.num_invoice AS numinv, 
    ROUND(z_tab_invoice.summa,2) AS aminvoice, z_tab_catal_type_budget_kovalchuk.kname  AS artbudg, 
    z_tab_invoice.sap_id AS ts, z_tab_invoice.reestr_num_kovalchuk as tblkoval, z_tab_invoice.id as idnt,
-   DATE_FORMAT(z_tab_invoice.dt_plan_of_pay,"%d.%m.%y") as dtplanpay,
+   z_tab_invoice.dt_plan_of_pay as dtplanpay,
    CONCAT(tab_catal_dogovor.dogovor,' от ', DATE_FORMAT(tab_catal_dogovor.dt_dogovor,"%d.%m.%y")) as dogo_vor,
    z_tab_invoice.description AS descr
   FROM z_tab_invoice 
@@ -29,7 +29,7 @@ UNION ALL
 (SELECT kli.client AS nplane, provider.client AS postav, z_tab_invoice.num_invoice AS numinv, 
   ROUND(z_tab_invoice.summa,2) AS aminvoice, z_tab_catal_type_budget_kovalchuk.kname  AS artbudg, 
   z_tab_invoice.sap_id AS ts, z_tab_invoice.reestr_num_kovalchuk as tblkoval, z_tab_invoice.id as idnt,
-  DATE_FORMAT(z_tab_invoice.dt_plan_of_pay,"%d.%m.%y") as dtplanpay, '' as dogo_vor,
+  z_tab_invoice.dt_plan_of_pay as dtplanpay, '' as dogo_vor,
   z_tab_invoice.description AS descr
 FROM z_tab_invoice 
  LEFT JOIN  tab_klients  kli ON z_tab_invoice.client=kli.id 
@@ -40,4 +40,4 @@ FROM z_tab_invoice
  LEFT JOIN z_tab_klients provider ON z_connecttable.tab_a_id = provider.id 
 WHERE z_tab_invoice.type_docum = "2" AND z_tab_invoice.not_incl_in_kreestr = "0" AND z_connecttable.tab_a like "z_tab_klients" AND z_tab_invoice.dt_of_pay = "0000-00-00" 
  AND (SELECT prv.status	FROM `z_confirmation` prv WHERE prv.sheet like "z_tab_invoice" AND prv.tmstamp <= concat(DATE(NOW()),"12:00:00") AND `prv`.`sheet_id` = z_tab_invoice.id ORDER BY prv.tmstamp DESC  LIMIT 1) NOT IN (30,50))) fin 
- ORDER BY fin.artbudg ASC, coment DESC, podtv ASC
+ ORDER BY fin.artbudg ASC,fin.dtplanpay ASC, coment DESC, podtv ASC
