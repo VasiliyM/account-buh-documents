@@ -19,6 +19,7 @@
 	   WHERE z_confirmation.sheet like 'z_tab_invoice' AND `z_confirmation`.`sheet_id` = z_tab_invoice.id 
 	   ORDER BY z_confirmation.tmstamp DESC LIMIT 1),'') AS status,
        z_tab_invoice.description AS comment,
+       DATE_FORMAT(z_tab_invoice.dt_plan_of_pay,"%d.%m.%y") as dtplanpay,
 	   z_tab_invoice.sap_id AS 'ts'
 FROM z_tab_invoice 
 LEFT JOIN  tab_catal_comm_dep ON z_tab_invoice.business = tab_catal_comm_dep.id
@@ -53,6 +54,7 @@ UNION ALL
 	   WHERE cfrm.sheet like 'z_tab_invoice' AND `cfrm`.`sheet_id` = z_tab_invoice.id 
 	   ORDER BY cfrm.tmstamp DESC LIMIT 1),'') AS status,
        z_tab_invoice.description AS comment,
+       DATE_FORMAT(z_tab_invoice.dt_plan_of_pay,"%d.%m.%y") as dtplanpay,
        z_tab_invoice.sap_id AS 'ts'
 FROM z_tab_invoice 
 LEFT JOIN  tab_catal_comm_dep ON z_tab_invoice.business = tab_catal_comm_dep.id
