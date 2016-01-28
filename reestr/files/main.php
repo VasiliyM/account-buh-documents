@@ -40,33 +40,29 @@
     require "get.nameAccess.php";
 ?>
 
-
+<div class="alert alert-info" role="alert">* Документы получившие подтверждение до 12:00 будут переданы на утверждение в финдеп на следующий день, подтвержденные после 12:00  - через день, будьте внимательны!</div>
 <div class="well">
-<!-- Extra small button group -->
-    <div class="page-header">
-<!--        <form class="navbar-form navbar-left" role="search">
-          <div class="form-group" >
-            <input type="text" class="form-control" placeholder="" disabled>
-          </div>
-          <button type="submit" class="btn btn-primary" disabled >Поиск</button>
-        </form>
--->
+    <div class="row">
+
         <div class="btn-group pull-right">
+                <label for="stat">Фильтр документов</label>
+        
             <select id="doc" class="form-control" name="document" onchange="selectDocument();">
                 <option value="1">Все документы</option>
                 <option value="2" selected>Требуется подтверждение менеджера</option>
                 <option value="3">Подтвержденные неоплаченные документы</option>
             </select>
         </div>
+        </div>
     </div>
-</div>
+
 
 
 
 <div class="panel panel-default">
   <div class="panel-body">
-
-
+            
+            
       <!-- DataTable -->
     <table id="table_main" class="display cell-border" cellspacing="0" width="100%">
         <thead>
@@ -89,34 +85,49 @@
         </tfoot>
     </table>
 
-      <div class='col-sm-1'>
-          <input type="text" class="form-control" name="datepicker" id="datepicker">
-      </div>
-      <div class='col-sm-5'>
-          <input type="text" class="form-control" name="description">
-      </div>
-      <div class='col-sm-3'>
-          <label for="stat" class="form-control" id="lbl_stat">Выбранным документам присвоить статус:</label>
-      </div>
-      <div class='col-sm-2'>
-          <select id="stat" class="form-control" name="status" onchange="javascript:selectStatus();">
-          <!--    <option value="Подтвердить оплату">Подтвердить оплату</option>
-              <option value="Срочно в оплату">Срочно в оплату</option>
-              <option value="Отменен">Отменен</option>
-              <option value="Перенесен на следующий день">Перенесен на следующий день</option>
-              -->
-          </select>
-      </div>
-      <div class='col-sm-1'>
-          <button type="button" id="button" class="btn btn-primary">Применить</button>
-      </div>
+    <form class="form-inline">
+               <div class="form-group col-md-3">
+                     <!-- <label for="stat">Примечание:</label> -->
+                      <textarea  class="form-control" style="width:100%" name="description" rows="1" placeholder="Примечание к статусу"></textarea>
+                     <!--  <input type="text" class="form-control" name="description" class="col-lg-6" placeholder="Примечание к устанавливаемому статусу,если имеется..">  -->
+                  
+              </div>
+              <div class="form-group">
+                   <label for="stat">Оплатить до:</label>
+                   <input type="text" class="form-control" name="datepicker" id="datepicker">
+              </div>
+             
+              <!--  <div class="form-group">
+                        
+                        <label for="stat" class="form-control" id="lbl_stat">Выбранным документам присвоить статус:</label>
+                    </div>
+              </div>
+               -->
+              <div class="form-group">
+                        <label for="stat"> Статус:</label>
+                      <select id="stat" class="form-control" name="status" onchange="javascript:selectStatus();">
+                      <!--    <option value="Подтвердить оплату">Подтвердить оплату</option>
+                          <option value="Срочно в оплату">Срочно в оплату</option>
+                          <option value="Отменен">Отменен</option>
+                          <option value="Перенесен на следующий день">Перенесен на следующий день</option>
+                          -->
+                      </select>
+                  
+              </div>
+              <div class="form-group">
+                   <button type="button" id="button" class="btn btn-primary">Подтвердить</button>      
+               </div>
+            </form>
 
   </div>
+    <div class="glyphicon glyphicon-envelope col-md-4 col-md-offset-4">
+<a href="mailto:ага&subject=WEB форма подтверждения счетов в оплату&body=Добрый день! %0A %0A У меня есть вопрос, <напишите суть вопроса>
+"title="Нажав на эту ссылку вы получите почти сформированное email сообщение, необходимо только вписать суть вопроса">Предложения,пожелания,консультация</a>
+</div> 
+
 </div>
-  <div class="alert alert-warning" role="alert">* Документы получившие подтверждение до 15:00 попадут в оплату на следующий день,подтвержденные после 15:00 будут переданны в оплату через день</div>
-  </div>
-  </div>
-
+  
+  
 
 
   </body>
