@@ -18,6 +18,7 @@
 	   LEFT JOIN  z_confirm_catal ON z_confirmation.status=z_confirm_catal.id 
 	   WHERE z_confirmation.sheet like 'z_tab_invoice' AND `z_confirmation`.`sheet_id` = z_tab_invoice.id 
 	   ORDER BY z_confirmation.tmstamp DESC LIMIT 1),'') AS status,
+	   DATE_FORMAT(z_tab_invoice.timestamp,"%d.%m.%y") as dtregistr,
        z_tab_invoice.description AS comment,
        DATE_FORMAT(z_tab_invoice.dt_plan_of_pay,"%d.%m.%y") as dtplanpay,
 	   z_tab_invoice.sap_id AS 'ts'
@@ -53,6 +54,7 @@ UNION ALL
 	   LEFT JOIN  z_confirm_catal ON cfrm.status=z_confirm_catal.id 
 	   WHERE cfrm.sheet like 'z_tab_invoice' AND `cfrm`.`sheet_id` = z_tab_invoice.id 
 	   ORDER BY cfrm.tmstamp DESC LIMIT 1),'') AS status,
+	   DATE_FORMAT(z_tab_invoice.timestamp,"%d.%m.%y") as dtregistr,
        z_tab_invoice.description AS comment,
        DATE_FORMAT(z_tab_invoice.dt_plan_of_pay,"%d.%m.%y") as dtplanpay,
        z_tab_invoice.sap_id AS 'ts'
